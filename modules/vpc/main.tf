@@ -20,18 +20,24 @@ resource "aws_subnet" "public_subnets" {
   count = length(var.pub_subnets_cidr_blocks)
 
   vpc_id             = aws_vpc.main.id
-  #availability_zone = var.availability_zones[count.index]
+  availability_zone  = var.availability_zones[count.index]
   cidr_block         = var.pub_subnets_cidr_blocks[count.index]
 
+  tags = {
+    Name = "public-subnet-${count.index}"
+  }
 }
 
 resource "aws_subnet" "private_subnets" {
   count = length(var.pri_subnets_cidr_blocks)
 
-  vpc_id             = aws_vpc.main.id
-  #availability_zone = var.availability_zones[count.index]
-  cidr_block         = var.pri_subnets_cidr_blocks[count.index]
+  vpc_id                 = aws_vpc.main.id
+  availability_zone  = var.availability_zones[count.index]
+  cidr_block             = var.pri_subnets_cidr_blocks[count.index]
 
+  tags = {
+    Name = "private-subnet-${count.index}"
+  }
 }
 
 #internet gateway

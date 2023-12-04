@@ -17,3 +17,8 @@ variable "pri_subnets_cidr_blocks" {
     description = "cidr range for private subnets"
     type = list(string)
 }
+
+variable "availability_zones" {
+  description = "Availiability zones"
+  type        = list(string)
+}
