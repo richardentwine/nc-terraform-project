@@ -7,3 +7,9 @@ module "vpc" {
   pub_subnets_cidr_blocks = var.pub_subnets_cidr_blocks
   pri_subnets_cidr_blocks = var.pri_subnets_cidr_blocks
 }
+
+module "security" {
+  source = "./modules/security"
+
+  vpc_id = var.vpc_id
+}
