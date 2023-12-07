@@ -1,3 +1,5 @@
+region                  ="eu-west-2"
+
 vpc_name                = "portfolio-vpc"
 
 vpc_cidr_range          = "10.0.0.0/16"

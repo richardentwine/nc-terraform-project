@@ -1,3 +1,8 @@
+variable "region" {
+  description = "Provider region"
+  type = string
+}
+
 variable "vpc_name" {
   description = "VPC name with a default value if none provided"
   type        = string
@@ -7,6 +12,7 @@ variable "vpc_name" {
 variable "vpc_id" {
   description = "VPC id"
   type        = string
+  default     = ""
 }
 
 variable "vpc_cidr_range" {
