@@ -17,7 +17,7 @@ variable "pub_subnets_cidr_blocks" {
 }
 
 variable "pri_subnets_cidr_blocks" {
-  description = "cidr range for public subnets with defaults if none are provided"
+  description = "cidr range for private subnets with defaults if none are provided"
   type        = list(string)
   default     = ["10.0.128.0/20", "10.0.144.0/20", "10.0.160.0/20"]
 }
@@ -26,4 +26,4 @@ variable "availability_zones" {
   description = "Availiability zones"
   type        = list(string)
   default     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-}  
+}

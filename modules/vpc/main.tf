@@ -1,10 +1,3 @@
-# Be in the correct region
-# Have 3 Availability Zones
-# Have a Public subnet in each AZ
-# Have a Private subnet in each AZ
-# Have an Internet Gateway
-# A route table that can deal with local traffic as well as route to the IGW for any other traffic
-
 #VPC
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_range
@@ -18,6 +11,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "public_subnets" {
   count             = length(var.pub_subnets_cidr_blocks)
+
   vpc_id            = aws_vpc.main.id
   #allows up to two subnets per availabilty zone
   availability_zone = count.index < length(var.availability_zones) ? var.availability_zones[count.index] : var.availability_zones[count.index - length(var.availability_zones)]
@@ -30,6 +24,7 @@ resource "aws_subnet" "public_subnets" {
 
 resource "aws_subnet" "private_subnets" {
   count             = length(var.pri_subnets_cidr_blocks)
+
   vpc_id            = aws_vpc.main.id
   #allows up to two subnets per availabilty zone
   availability_zone = count.index < length(var.availability_zones) ? var.availability_zones[count.index] : var.availability_zones[count.index - length(var.availability_zones)]
@@ -41,3 +36,48 @@ resource "aws_subnet" "private_subnets" {
 }
 
 #internet gateway
+resource "aws_internet_gateway" "portfolio_gw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main"
+  }
+}
+
+#route tables
+resource "aws_route" "public_internet_gateway" {
+
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.portfolio_gw.id
+}
+
+resource "aws_route_table" "public" {
+  vpc_id     = aws_vpc.main.id
+
+  tags = {
+    Name = "public-portfolio-routetable"
+  }
+}
+
+resource "aws_route_table_association" "public" {
+  count          = length(aws_subnet.public_subnets)
+
+  subnet_id      = aws_subnet.public_subnets[count.index].id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table" "private" {
+  vpc_id     = aws_vpc.main.id
+
+  tags = {
+    Name = "private-portfolio-routetable"
+  }
+}
+
+resource "aws_route_table_association" "private" {
+  count          = length(aws_subnet.private_subnets)
+
+  subnet_id      = aws_subnet.private_subnets[count.index].id
+  route_table_id = aws_route_table.private.id
+}
