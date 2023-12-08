@@ -9,12 +9,6 @@ variable "vpc_name" {
   default     = "main"
 }
 
-variable "vpc_id" {
-  description = "VPC id"
-  type        = string
-  default     = ""
-}
-
 variable "vpc_cidr_range" {
   description = "cidr range with a default value if none is provided"
   type        = string
