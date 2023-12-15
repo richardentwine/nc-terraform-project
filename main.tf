@@ -11,5 +11,12 @@ module "vpc" {
 module "security" {
   source = "./modules/security"
 
-  vpc_id = var.vpc_id
+  vpc_id = module.vpc.vpc_id
+}
+
+module "lighting" {
+  source = "./modules/lighting"
+
+  vpc_security_group_ids = [module.security.app_server_security_group_id]
+  public_subnets         = module.vpc.public_subnets_ids
 }
